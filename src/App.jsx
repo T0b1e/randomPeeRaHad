@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import { SHA256 } from 'crypto-js';
+import AES from 'crypto-js/aes';
 
 import './App.css'
 import TextField from '@mui/material/TextField';
@@ -37,18 +38,20 @@ function App() {
 
     if (userExists) {
       try {
-        const response = await axios.get(`https://script.google.com/macros/s/AKfycbyI4QZkg1XI77TTzhVdUfL7ngHRg5uAEMMeTKbiICoYvZaUECT45Kf6JMMe7s9HhUuA/exec?studentID=${inputValue}`);
+        const response = await axios.get(`https://script.google.com/macros/s/AKfycbw9F4r7lb6sU4ryWIhmGKgy7_cdFxlf9JuTaji8FHaFAF-_ckgNpNioPaeId3G_9oHW/exec?studentID=${inputValue}`);
 
         if (response.status === 200) {
           console.log('Request succeeded');
 
-          const hashedData = SHA256(JSON.stringify(response.data)).toString();
+          console.log(response.data)
 
-          setResponseData(hashedData); 
+          const encryptedData = AES.encrypt(JSON.stringify(response.data), 'yourMomFatAssBitch').toString();
+  
+          localStorage.setItem('encryptedData', encryptedData);
+  
           setShowResponse(true);
-
-          navigate(`/random/:${hashedData}`);
-
+  
+          navigate(`/random/:${SHA256(encryptedData).toString()}`);
         } else {
           console.error('Request failed with status code:', response.status);
         }
