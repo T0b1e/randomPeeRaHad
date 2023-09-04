@@ -31,7 +31,19 @@ function Random() {
       setDecryptedData({ bytes: ['No data found in local storage'] });
     }
   }, []);
-  
+
+  const extractImageId = (url) => {
+    // Check if the URL is not null and contains '='
+    if (url && url.includes('=')) {
+      // Split the URL by '=' and get the second part (after '=')
+      const parts = url.split('=');
+      if (parts.length === 2) {
+        return parts[1];
+      }
+    }
+    return null;
+  };
+
   const renderCardContent = () => {
     if (!decryptedData) {
       // Handle the case where decryptedData is null or undefined
@@ -41,12 +53,19 @@ function Random() {
         </Typography>
       );
     }
-  
-    if (decryptedData[1] && decryptedData[2]) {
+
+    const imageId = extractImageId(decryptedData[1]);
+
+    console.log(imageId)
+    
+    if (imageId) {
+      // Construct the new image URL
+      const imageUrl = `https://drive.google.com/uc?export=download&id=${imageId}`;
+
       // Render image, header, and small text
       return (
         <div>
-          <img src={decryptedData[1].replace('/open?', '/uc?export&')} alt="Image" style={{ maxWidth: '100%' }} />
+          <img src={imageUrl} alt="Image" style={{ maxWidth: '100%' }} />
           <Typography variant="h5" component="div" gutterBottom>
             {decryptedData[0]}
           </Typography>
@@ -81,15 +100,11 @@ function Random() {
       );
     }
   };
+
   return (
     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
-      <Card style={{  display: 'block',
-                      width: '300px',
-                      transitionDuration: '0.3s',
-                      height: '45vw' }}>
-        <CardContent>
-          {renderCardContent()}
-        </CardContent>
+      <Card style={{ display: 'block', width: '300px', transitionDuration: '0.3s', height: '45vw' }}>
+        <CardContent>{renderCardContent()}</CardContent>
       </Card>
     </div>
   );

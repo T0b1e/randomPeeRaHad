@@ -1,90 +1,78 @@
-const fs = require('fs').promises;
-const path = require('path');
-const process = require('process');
-const {authenticate} = require('@google-cloud/local-auth');
-const {google} = require('googleapis');
+import { useEffect, useState } from 'react';
+import { google } from 'googleapis';
+import axios from 'axios';
 
-// If modifying these scopes, delete token.json.
-const SCOPES = ['https://www.googleapis.com/auth/drive.metadata.readonly'];
-// The file token.json stores the user's access and refresh tokens, and is
-// created automatically when the authorization flow completes for the first
-// time.
-const TOKEN_PATH = path.join(process.cwd(), './assets/token.json');
-const CREDENTIALS_PATH = path.join(process.cwd(), './assets/credentials.json');
+// Replace with your own client ID and client secret from the Google Developers Console
+const CLIENT_ID = 'YOUR_CLIENT_ID';
+const CLIENT_SECRET = 'YOUR_CLIENT_SECRET';
 
-/**
- * Reads previously authorized credentials from the save file.
- *
- * @return {Promise<OAuth2Client|null>}
- */
-async function loadSavedCredentialsIfExist() {
-  try {
-    const content = await fs.readFile(TOKEN_PATH);
-    const credentials = JSON.parse(content);
-    return google.auth.fromJSON(credentials);
-  } catch (err) {
-    return null;
-  }
+const SCOPES = ['https://www.googleapis.com/auth/drive.readonly'];
+
+function GoogleDriveImage({ fileId }) {
+  const [imageUrl, setImageUrl] = useState(null);
+
+  useEffect(() => {
+    const authenticate = async () => {
+      try {
+        const auth = new google.auth.OAuth2(
+          CLIENT_ID,
+          CLIENT_SECRET,
+          'http://localhost' // This is your redirect URL for development
+        );
+
+        // Generate an authentication URL
+        const authUrl = auth.generateAuthUrl({
+          access_type: 'offline',
+          scope: SCOPES,
+        });
+
+        // Open a new window to allow the user to sign in with Google
+        const authWindow = window.open(authUrl, '_blank');
+
+        // Wait for the user to complete authentication
+        await new Promise((resolve) => {
+          const checkAuth = () => {
+            if (authWindow.closed) {
+              resolve();
+            } else {
+              setTimeout(checkAuth, 100);
+            }
+          };
+          checkAuth();
+        });
+
+        // Exchange the authorization code for an access token
+        const { tokens } = await auth.getToken(code);
+
+        // Set the access token for future API requests
+        auth.setCredentials(tokens);
+
+        // Fetch the image URL
+        const drive = google.drive({ version: 'v3', auth });
+        const response = await drive.files.get({
+          fileId,
+          fields: 'webViewLink',
+        });
+
+        // Get the webViewLink from the response
+        const { webViewLink } = response.data;
+
+        setImageUrl(webViewLink);
+      } catch (error) {
+        console.error('Error authenticating:', error);
+      }
+    };
+
+    authenticate();
+  }, [fileId]);
+
+  return (
+    <div>
+      {imageUrl && (
+        <img src={imageUrl} alt="Google Drive Image" />
+      )}
+    </div>
+  );
 }
 
-/**
- * Serializes credentials to a file comptible with GoogleAUth.fromJSON.
- *
- * @param {OAuth2Client} client
- * @return {Promise<void>}
- */
-async function saveCredentials(client) {
-  const content = await fs.readFile(CREDENTIALS_PATH);
-  const keys = JSON.parse(content);
-  const key = keys.installed || keys.web;
-  const payload = JSON.stringify({
-    type: 'authorized_user',
-    client_id: key.client_id,
-    client_secret: key.client_secret,
-    refresh_token: client.credentials.refresh_token,
-  });
-  await fs.writeFile(TOKEN_PATH, payload);
-}
-
-/**
- * Load or request or authorization to call APIs.
- *
- */
-async function authorize() {
-  let client = await loadSavedCredentialsIfExist();
-  if (client) {
-    return client;
-  }
-  client = await authenticate({
-    scopes: SCOPES,
-    keyfilePath: CREDENTIALS_PATH,
-  });
-  if (client.credentials) {
-    await saveCredentials(client);
-  }
-  return client;
-}
-
-/**
- * Lists the names and IDs of up to 10 files.
- * @param {OAuth2Client} authClient An authorized OAuth2 client.
- */
-async function listFiles(authClient) {
-  const drive = google.drive({version: 'v3', auth: authClient});
-  const res = await drive.files.list({
-    pageSize: 10,
-    fields: 'nextPageToken, files(id, name)',
-  });
-  const files = res.data.files;
-  if (files.length === 0) {
-    console.log('No files found.');
-    return;
-  }
-
-  console.log('Files:');
-  files.map((file) => {
-    console.log(`${file.name} (${file.id})`);
-  });
-}
-
-authorize().then(listFiles).catch(console.error);
+export default GoogleDriveImage;
