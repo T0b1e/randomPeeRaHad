@@ -1,17 +1,19 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { AES, enc } from 'crypto-js';
-import axios from 'axios';
 
 import './card.css';
 
 function Random() {
   const { studentID } = useParams();
+  const [originData, setOriginData] = useState('');
   const [decryptedDataArray, setDecryptedData] = useState(null);
   const [imageURL, setImageURL] = useState(null);
 
   useEffect(() => {
     const storedData = localStorage.getItem('encryptedData');
+
+    setOriginData(storedData);
 
     if (storedData) {
       try {
@@ -74,9 +76,14 @@ function Random() {
   };
 
   return (
-    <div className="container">
+    <div className="card-container">
       <div className="card">
-        {renderCardContent()}
+          <div className="card-front">
+            {renderCardContent()}
+          </div>
+          <div className="card-back">
+            <p className='fakeTagNFT'>{originData.slice(0, 30)}</p>
+          </div>
       </div>
     </div>
   );

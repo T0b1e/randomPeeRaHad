@@ -1,47 +1,96 @@
 /* Random.css */
 
-.container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-  }
-  
-  .card {
-    display: block;
-    width: 300px;
-    transition-duration: 0.3s;
-    height: 450px;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-  }
-  
-  .no-content,
-  .header-only {
-    text-align: center;
-    font-family: Kanit, sans-serif;
-    font-size: 24px;
-  }
-  
-  .content {
-    text-align: center;
-  }
-  
-  .image {
-    max-width: 100%;
-  }
-  
-  .header {
-    font-family: Kanit, sans-serif;
-    font-size: 24px;
-    margin-bottom: 10px;
-  }
-  
-  .text {
-    font-family: Kanit, sans-serif;
-    font-size: 16px;
-    color: #555;
-  }
-  
+.card-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+.card-container .card {
+  position: relative;
+  display: block;
+  width: 300px;
+  transition-duration: 0.3s;
+  height: 450px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+
+.card-container {
+  perspective: 900px;
+}
+
+.card {
+  text-align: center;
+  transition: all 1.5s cubic-bezier(0.7, -.5, 0.3, 1.8);
+  transform-style: preserve-3d;
+}
+
+.card-container:hover .card {
+  transform: rotateY(180deg);
+}
+
+.card-front, .card-back {
+  width: 300px;
+  position: relative;
+  top: 0;
+  left: 0;
+  backface-visibility: hidden;
+}
+
+.card-front {
+  border-radius: 50px;
+}
+
+.card-back {
+  transform: rotateY(180deg);
+  position: absolute;
+  border-radius: 50px;
+  height: 450px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Center vertically */
+  align-items: center; /* Center horizontally */
+}
+
+.card-back .fakeTagNFT {
+  position: absolute;
+  left: 0; 
+  top: 50%;
+  transform: translateY(-50%); 
+  padding-left: 10px;
+}
+
+.no-content,
+.header-only {
+  text-align: center;
+  font-family: Kanit, sans-serif;
+  font-size: 40px;
+  margin-top: 50%;
+}
+
+.content {
+  text-align: center;
+  margin-top: 25%;
+}
+
+.image {
+  max-width: 100%;
+}
+
+.header {
+  font-family: Kanit, sans-serif;
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.text {
+  font-family: Kanit, sans-serif;
+  font-size: 16px;
+  color: #555;
+}
