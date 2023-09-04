@@ -4,10 +4,12 @@ import { AES, enc } from 'crypto-js';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
+import axios from 'axios';
 
 function Random() {
   const { studentID } = useParams();
-  const [decryptedData, setDecryptedData] = useState(null);
+  const [decryptedDataArray, setDecryptedData] = useState(null);
+  const [imageURL, setImageURL] = useState(null);
 
   useEffect(() => {
     // Try to retrieve encrypted data from local storage
@@ -15,13 +17,16 @@ function Random() {
 
     if (storedData) {
       try {
-        // Decrypt the stored data using your secret key
         const bytes = AES.decrypt(storedData, 'yourMomFatAssBitch');
 
-        // Convert the decrypted data to a string
         const decryptedText = bytes.toString(enc.Utf8);
 
-        setDecryptedData(JSON.parse(decryptedText));
+        const decryptedData = JSON.parse(decryptedText);
+        setDecryptedData(decryptedData);
+
+        console.log(decryptedData, decryptedData[1].toString().replace('open', 'uc'));
+        setImageURL(decryptedData[1]);
+
       } catch (error) {
         console.error('Decryption error:', error);
         setDecryptedData({ bytes: ['No header text available'] });
@@ -32,69 +37,54 @@ function Random() {
     }
   }, []);
 
-  const extractImageId = (url) => {
-    // Check if the URL is not null and contains '='
-    if (url && url.includes('=')) {
-      // Split the URL by '=' and get the second part (after '=')
-      const parts = url.split('=');
-      if (parts.length === 2) {
-        return parts[1];
-      }
-    }
-    return null;
+  const typographyStyle = {
+    fontFamily: 'Kanit, sans-serif', // Set the font family to Kanit
   };
 
   const renderCardContent = () => {
-    if (!decryptedData) {
-      // Handle the case where decryptedData is null or undefined
+    if (!decryptedDataArray) {
+      // Handle the case where decryptedDataArray is null or undefined
       return (
-        <Typography variant="h3" component="div" align="center">
+        <Typography variant="h3" component="div" align="center" style={typographyStyle}>
           No content available
         </Typography>
       );
     }
 
-    const imageId = extractImageId(decryptedData[1]);
-
-    console.log(imageId)
-    
-    if (imageId) {
-      // Construct the new image URL
-      const imageUrl = `https://drive.google.com/uc?export=download&id=${imageId}`;
-
+    if (imageURL) {
       // Render image, header, and small text
       return (
         <div>
-          <img src={imageUrl} alt="Image" style={{ maxWidth: '100%' }} />
-          <Typography variant="h5" component="div" gutterBottom>
-            {decryptedData[0]}
+          <img src={decryptedDataArray[1].toString().replace('open', 'uc')} alt="Image" style={{ maxWidth: '100%' }} />
+          <Typography variant="h5" component="div" gutterBottom style={typographyStyle}>
+            {decryptedDataArray[0]}
           </Typography>
-          <Typography variant="body2" color="text.secondary">
-            {decryptedData[2]}
+          <Typography variant="body2" color="text.secondary" style={typographyStyle}>
+            {decryptedDataArray[2]}
           </Typography>
         </div>
       );
-    } else if (decryptedData[1]) {
+    } else if (decryptedDataArray[1]) {
       // Render image and header
       return (
         <div>
-          <img src={decryptedData[1].replace('/open?', '/uc?export&')} alt="Image" style={{ maxWidth: '100%' }} />
-          <Typography variant="h5" component="div" gutterBottom>
-            {decryptedData[0]}
+          <img src={decryptedDataArray[1].toString().replace('open', 'uc')} alt="Image" style={{ maxWidth: '100%' }} />
+          <Typography variant="h5" component="div" gutterBottom style={typographyStyle}>
+            {decryptedDataArray[0]}
           </Typography>
         </div>
       );
-    } else if (decryptedData[0]) {
+    } else if (decryptedDataArray[0]) {
       // Render header only
       return (
-        <Typography variant="h3" component="div" align="center">
-          {decryptedData[0]}
+        <Typography variant="h3" component="div" align="center" style={typographyStyle}>
+          {decryptedDataArray[0]}
         </Typography>
       );
     } else {
       // Render a default message
       return (
-        <Typography variant="h3" component="div" align="center">
+        <Typography variant="h3" component="div" align="center" style={typographyStyle}>
           No content available
         </Typography>
       );
@@ -103,7 +93,7 @@ function Random() {
 
   return (
     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
-      <Card style={{ display: 'block', width: '300px', transitionDuration: '0.3s', height: '45vw' }}>
+      <Card style={{ display: 'block', width: '300px', transitionDuration: '0.3s', height: '450px' }}>
         <CardContent>{renderCardContent()}</CardContent>
       </Card>
     </div>
