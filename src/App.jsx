@@ -68,7 +68,7 @@ function App() {
 
 
   return (
-    <div className="container">
+    <div className="input-container">
     <form onSubmit={handleSubmit}>
       <Stack spacing={2} direction="column">
         <TextField

@@ -42,7 +42,6 @@ function Random() {
     }
 
     if (imageURL) {
-      // Render image, header, and small text
       return (
         <div className="content">
           <img src={decryptedDataArray[1].toString().replace('open', 'uc')} alt="Image" className="image" />
@@ -82,7 +81,10 @@ function Random() {
             {renderCardContent()}
           </div>
           <div className="card-back">
-            <p className='fakeTagNFT'>{originData.slice(0, 30)}</p>
+            <h3 className='lottery'>Number Card: {Math.floor(Math.random() * (50 - 1) + 1)}</h3>
+              <div className='footer'>
+                <p className='credit'>CPE 65</p>
+              </div>
           </div>
       </div>
     </div>

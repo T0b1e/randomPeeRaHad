@@ -54,6 +54,10 @@ body {
   top: 0;
   left: 0;
   backface-visibility: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .card-front {
@@ -67,16 +71,23 @@ body {
   height: 450px;
   display: flex;
   flex-direction: column;
-  justify-content: center; /* Center vertically */
-  align-items: center; /* Center horizontally */
+  justify-content: space-between;
+  align-items: center;
 }
 
-.card-back .fakeTagNFT {
+.card-back .footer .credit {
   position: absolute;
-  left: 0; 
-  top: 50%;
+  color: gray;
+  font-size: 14px;
+  top: 100%; 
+  left: 37%;
+}
+
+.lottery {
+  position: absolute;
+  left: 60px;
+  top: 50%; 
   transform: translateY(-50%); 
-  padding-left: 10px;
 }
 
 .no-content,
