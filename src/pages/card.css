@@ -1,5 +1,18 @@
 /* Random.css */
 
+body {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  overflow: hidden;
+  background-image: url("../image/action.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
 .card-container {
   position: relative;
   display: flex;
@@ -94,3 +107,5 @@
   font-size: 16px;
   color: #555;
 }
+
+
