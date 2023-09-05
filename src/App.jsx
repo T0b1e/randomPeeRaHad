@@ -19,6 +19,8 @@ function App() {
   const [responseData, setResponseData] = useState(null);
   const [showResponse, setShowResponse] = useState(false);
 
+  const [lottery, setLottery] = useState('');
+
   const navigate = useNavigate();
 
   const handleInputChange = (e) => {
@@ -38,19 +40,24 @@ function App() {
 
     if (userExists) {
       try {
-        const response = await axios.get(`https://script.google.com/macros/s/AKfycbw9F4r7lb6sU4ryWIhmGKgy7_cdFxlf9JuTaji8FHaFAF-_ckgNpNioPaeId3G_9oHW/exec?studentID=${inputValue}`);
+
+        setLottery(Math.floor(Math.random() * 100) + 1)
+
+        const response = await axios.get(`https://script.google.com/macros/s/AKfycbw6vfuUEWetIAuABkdRY5LJD7JrLO6SlWbiZZrzz42uF6v7q3mRTqVUGdSwuae_vJQJ/exec?studentID=${inputValue}`);
 
         if (response.status === 200) {
           console.log('Request succeeded');
 
-          console.log(response.data)
+          console.log(response.data);
 
           const encryptedData = AES.encrypt(JSON.stringify(response.data), 'yourMomFatAssBitch').toString();
-  
+
+
+
           localStorage.setItem('encryptedData', encryptedData);
-  
+
           setShowResponse(true);
-  
+
           navigate(`/random/:${SHA256(encryptedData).toString()}`);
         } else {
           console.error('Request failed with status code:', response.status);
@@ -66,26 +73,25 @@ function App() {
     setIsInputEmpty(false);
   };
 
-
   return (
     <div className="input-container">
-    <form onSubmit={handleSubmit}>
-      <Stack spacing={2} direction="column">
-        <TextField
-          id="outlined-basic"
-          label="รหัสนักศึกษา"
-          variant="outlined"
-          value={inputValue}
-          onChange={handleInputChange}
-          placeholder="รหัสนักศึกษา ..."
-          className="inputField"
-        />
-        <Button variant="contained" type="submit" className="button" disabled={isInputEmpty}>
-          ตามหาพี่รหัสกันเหอะ
-        </Button>
-      </Stack>
-    </form>
-  </div>
+      <form onSubmit={handleSubmit}>
+        <Stack spacing={2} direction="column">
+          <TextField
+            id="outlined-basic"
+            label="รหัสนักศึกษา"
+            variant="outlined"
+            value={inputValue}
+            onChange={handleInputChange}
+            placeholder="รหัสนักศึกษา ..."
+            className="inputField"
+          />
+          <Button variant="contained" type="submit" className="button" disabled={isInputEmpty}>
+            ตามหาพี่รหัสกันเหอะ
+          </Button>
+        </Stack>
+      </form>
+    </div>
   );
 }
 
