@@ -43,7 +43,7 @@ function App() {
 
         setLottery(Math.floor(Math.random() * 100) + 1)
 
-        const response = await axios.get(`https://script.google.com/macros/s/AKfycbw6vfuUEWetIAuABkdRY5LJD7JrLO6SlWbiZZrzz42uF6v7q3mRTqVUGdSwuae_vJQJ/exec?studentID=${inputValue}`);
+        const response = await axios.get(`https://script.google.com/macros/s/AKfycbxoGUh-X8vmLM7Kegolvk5UICpn2pwsOd3VxbGp4MENWLNDGWTc3ExEQYPMgVOIpLFg/exec?studentID=${6600014}`);
 
         if (response.status === 200) {
           console.log('Request succeeded');

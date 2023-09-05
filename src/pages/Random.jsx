@@ -2,13 +2,14 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { AES, enc } from 'crypto-js';
 
-import './card.css';
+import './Card.css';
 
 function Random() {
   const { studentID } = useParams();
   const [originData, setOriginData] = useState('');
   const [decryptedDataArray, setDecryptedData] = useState(null);
   const [imageURL, setImageURL] = useState(null);
+  const [isCardFlipped, setIsCardFlipped] = useState(false); 
 
   useEffect(() => {
     const storedData = localStorage.getItem('encryptedData');
@@ -32,6 +33,11 @@ function Random() {
       setDecryptedData({ bytes: ['No data found in local storage'] });
     }
   }, []);
+
+  const handleFlipClick = () => {
+    console.log(isCardFlipped)
+    setIsCardFlipped(!isCardFlipped); 
+  };
 
   const renderCardContent = () => {
     if (!decryptedDataArray) {
@@ -77,18 +83,21 @@ function Random() {
   };
 
   return (
-    <div className="card-container">
-      <div className="card">
-          <div className="card-front">
+    <div>
+      <div className={`card-container ${isCardFlipped ? 'card-flipped' : ''}`}>
+        <div className="card">
+          <div className={`card-front ${isCardFlipped ? 'hidden' : ''}`}>
             {renderCardContent()}
           </div>
-          <div className="card-back">
-          <h3 className='lottery'>Number Card: {decryptedDataArray && decryptedDataArray[1]}</h3>
-              <div className='footer'>
-                <p className='credit'>CPE 65</p>
-              </div>
+          <div className={`card-back ${isCardFlipped ? '' : 'hidden'}`}>
+            <h3 className='lottery'>Number Card: {decryptedDataArray && decryptedDataArray[1]}</h3>
+            <div className='footer'>
+              <p className='credit'>CPE 65</p>
+            </div>
           </div>
+        </div>
       </div>
+      <button className="flip-button" onClick={handleFlipClick}>Flip Card</button> 
     </div>
   );
 }
