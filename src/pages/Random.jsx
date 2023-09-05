@@ -20,7 +20,8 @@ function Random() {
         const bytes = AES.decrypt(storedData, 'yourMomFatAssBitch');
         const decryptedText = bytes.toString(enc.Utf8);
         const decryptedData = JSON.parse(decryptedText);
-        console.log(decryptedData);
+        console.log('Decrypted Data:', decryptedData);
+
         setDecryptedData(decryptedData);
         setImageURL(decryptedData[0][1]);
       } catch (error) {
@@ -82,7 +83,7 @@ function Random() {
             {renderCardContent()}
           </div>
           <div className="card-back">
-            <h3 className='lottery'>Number Card: {decryptedDataArray[1]}</h3>
+          <h3 className='lottery'>Number Card: {decryptedDataArray && decryptedDataArray[1]}</h3>
               <div className='footer'>
                 <p className='credit'>CPE 65</p>
               </div>

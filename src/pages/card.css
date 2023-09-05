@@ -26,22 +26,13 @@ body {
   position: relative;
   display: block;
   width: 300px;
-  transition-duration: 0.3s;
   height: 450px;
   background-color: #fff;
   border: 1px solid #ccc;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   padding: 20px;
-}
-
-.card-container {
-  perspective: 900px;
-}
-
-.card {
-  text-align: center;
-  transition: all 1.5s cubic-bezier(0.7, -.5, 0.3, 1.8);
   transform-style: preserve-3d;
+  transition: transform 0.5s;
 }
 
 .card-container:hover .card {
@@ -49,8 +40,9 @@ body {
 }
 
 .card-front, .card-back {
-  width: 300px;
-  position: relative;
+  width: 100%;
+  height: 100%;
+  position: absolute;
   top: 0;
   left: 0;
   backface-visibility: hidden;
@@ -66,28 +58,22 @@ body {
 
 .card-back {
   transform: rotateY(180deg);
-  position: absolute;
-  border-radius: 50px;
-  height: 450px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
 }
 
 .card-back .footer .credit {
-  position: absolute;
   color: gray;
+  position: absolute;
   font-size: 14px;
-  top: 100%; 
-  left: 37%;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .lottery {
   position: absolute;
-  left: 60px;
-  top: 50%; 
-  transform: translateY(-50%); 
+  left: 27.5%;
+  top: 45%;
+  transform: translateY(-50%);
 }
 
 .no-content,
@@ -104,6 +90,7 @@ body {
 }
 
 .image {
+  height: 25%;
   max-width: 100%;
 }
 
@@ -118,5 +105,3 @@ body {
   font-size: 16px;
   color: #555;
 }
-
-
