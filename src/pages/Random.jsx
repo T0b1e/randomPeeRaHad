@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { BsDownload } from 'react-icons/Bs';
 import { AES, enc } from 'crypto-js';
 
 import './Card.css';
-import "./FlipTransition.css";
+import html2canvas from 'html2canvas';
 
 function Random({onClick}) {
   const { studentID } = useParams();
@@ -40,9 +41,21 @@ function Random({onClick}) {
     setIsCardFlipped(!isCardFlipped); 
   };
 
+  const handleSaveClick = () => {
+    const cardElement = document.querySelector('.card-container'); 
+  
+    html2canvas(cardElement).then((canvas) => {
+      const imageDataURL = canvas.toDataURL('image/png');
+  
+      const link = document.createElement('a');
+      link.href = imageDataURL;
+      link.download = 'card.png';
+      link.click();
+    });
+  };
+
   const renderCardContent = () => {
     if (!decryptedDataArray) {
-      // Handle the case where decryptedDataArray is null or undefined
       return (
         <div className="no-content">
           No content available
@@ -59,7 +72,6 @@ function Random({onClick}) {
         </div>
       );
     } else if (decryptedDataArray[0][1]) {
-      // Render image and header
       return (
         <div className="content">
           <img src={decryptedDataArray[0][1].toString().replace('open', 'uc')} alt="Image" className="image" />
@@ -67,14 +79,12 @@ function Random({onClick}) {
         </div>
       );
     } else if (decryptedDataArray[0][0]) {
-      // Render header only
       return (
         <div className="header-only">
           {decryptedDataArray[0][0]}
         </div>
       );
     } else {
-      // Render a default message
       return (
         <div className="no-content">
           No content available
@@ -86,7 +96,7 @@ function Random({onClick}) {
   return (
     <div>
       <div className="card-container">
-        <div className="card" onClick={onClick}>
+        <div className="card">
           <div className="card-front">
             {renderCardContent()}
           </div>
@@ -99,6 +109,13 @@ function Random({onClick}) {
         </div>
       </div>
       <button className="flip-button" onClick={handleFlipClick}>Flip Card</button> 
+
+      <button className="save-button" onClick={handleSaveClick} style={{
+        height: '50px',
+        position: 'fixed',
+        bottom: '20px', 
+        right: '20px',  
+      }}>Save Picture <BsDownload /></button>
     </div>
   );
 }
