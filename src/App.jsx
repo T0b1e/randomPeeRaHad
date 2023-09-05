@@ -16,15 +16,14 @@ function App() {
   const [submittedValue, setSubmittedValue] = useState('');
   const [isInputEmpty, setIsInputEmpty] = useState(false);
   const [userExists, setUserExists] = useState(false);
-  const [responseData, setResponseData] = useState(null);
   const [showResponse, setShowResponse] = useState(false);
-
-  const [lottery, setLottery] = useState('');
+  const [message, setMessage] = useState('');
 
   const navigate = useNavigate();
 
   const handleInputChange = (e) => {
     setInputValue(e.target.value);
+    setMessage('');
   };
 
   const handleSubmit = async (e) => {
@@ -41,9 +40,7 @@ function App() {
     if (userExists) {
       try {
 
-        setLottery(Math.floor(Math.random() * 100) + 1)
-
-        const response = await axios.get(`https://script.google.com/macros/s/AKfycbxoGUh-X8vmLM7Kegolvk5UICpn2pwsOd3VxbGp4MENWLNDGWTc3ExEQYPMgVOIpLFg/exec?studentID=${6600014}`);
+        const response = await axios.get(`https://script.google.com/macros/s/AKfycbz9njkuB_G8W5H8--y69fAvUDB0JtN8UzzjUlYyp8NypRS_ECHA9HANlvP9KUKFXuet/exec?studentID=${6600014}`);
 
         if (response.status === 200) {
           console.log('Request succeeded');
@@ -52,13 +49,15 @@ function App() {
 
           const encryptedData = AES.encrypt(JSON.stringify(response.data), 'yourMomFatAssBitch').toString();
 
-
-
           localStorage.setItem('encryptedData', encryptedData);
 
           setShowResponse(true);
 
-          navigate(`/random/:${SHA256(encryptedData).toString()}`);
+          if (response.data.statusCode === 400) {
+            setMessage('อย่าโลภมากน้อง สุ่มครั้งเดียวพอ');
+          } else {
+            navigate(`/random/:${SHA256(encryptedData).toString()}`);
+          }
         } else {
           console.error('Request failed with status code:', response.status);
         }
@@ -89,6 +88,7 @@ function App() {
           <Button variant="contained" type="submit" className="button" disabled={isInputEmpty}>
             ตามหาพี่รหัสกันเหอะ
           </Button>
+          {message && <p style={{ color: 'red', animation: 'shake 0.5s' }}>{message}</p>}
         </Stack>
       </form>
     </div>

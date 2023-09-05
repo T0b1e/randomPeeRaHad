@@ -3,8 +3,9 @@ import { useParams } from 'react-router-dom';
 import { AES, enc } from 'crypto-js';
 
 import './Card.css';
+import "./FlipTransition.css";
 
-function Random() {
+function Random({onClick}) {
   const { studentID } = useParams();
   const [originData, setOriginData] = useState('');
   const [decryptedDataArray, setDecryptedData] = useState(null);
@@ -84,12 +85,12 @@ function Random() {
 
   return (
     <div>
-      <div className={`card-container ${isCardFlipped ? 'card-flipped' : ''}`}>
-        <div className="card">
-          <div className={`card-front ${isCardFlipped ? 'hidden' : ''}`}>
+      <div className="card-container">
+        <div className="card" onClick={onClick}>
+          <div className="card-front">
             {renderCardContent()}
           </div>
-          <div className={`card-back ${isCardFlipped ? '' : 'hidden'}`}>
+          <div className="card-back">
             <h3 className='lottery'>Number Card: {decryptedDataArray && decryptedDataArray[1]}</h3>
             <div className='footer'>
               <p className='credit'>CPE 65</p>
