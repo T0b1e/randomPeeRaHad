@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { BsDownload } from 'react-icons/Bs';
 import { AES, enc } from 'crypto-js';
+import ReactCardFlip from "react-card-flip";
 
 import './Card.css';
 import html2canvas from 'html2canvas';
@@ -37,8 +38,8 @@ function Random({onClick}) {
   }, []);
 
   const handleFlipClick = () => {
-    console.log(isCardFlipped)
-    setIsCardFlipped(!isCardFlipped); 
+    console.log('isCardFlipped:', isCardFlipped);
+    setIsCardFlipped(!isCardFlipped);
   };
 
   const handleSaveClick = () => {
@@ -95,30 +96,32 @@ function Random({onClick}) {
 
   return (
     <div>
-      <div className={`card-container${isCardFlipped ? ' flipped' : ''}`}>
-        <div className="card">
-          <div className="card-front">
-            {renderCardContent()}
-          </div>
-          <div className="card-back">
-            <h3 className='lottery'>Number Card: {decryptedDataArray && decryptedDataArray[1]}</h3>
-            <div className='footer'>
-              <p className='credit'>CPE 65</p>
-            </div>
-          </div>
+    <ReactCardFlip isFlipped={isCardFlipped} flipDirection="horizontal">
+    {/* Front card */}
+    <div className="card-container">
+      <div className="card-front">
+        {renderCardContent()}
+      </div>
+    </div>
+
+    {/* Back card */}
+    <div className="card-container">
+      <div className="card-back">
+        <h3 className="lottery">Number Card: {decryptedDataArray && decryptedDataArray[1]}</h3>
+        <div className="footer">
+          <p className="credit">CPE 65</p>
         </div>
       </div>
-      <button className="flip-button" onClick={handleFlipClick}>
-        {isCardFlipped ? 'Flip Back' : 'Flip Card'}
+    </div>
+  </ReactCardFlip>
+
+    <button className="flip-button" onClick={handleFlipClick}>
+      Flip Card
+    </button>
+
+      <button className="save-button" onClick={handleSaveClick} style={{ height: '50px', position: 'fixed', bottom: '20px', right: '20px' }}>
+        Save Picture <BsDownload />
       </button>
-
-
-      <button className="save-button" onClick={handleSaveClick} style={{
-        height: '50px',
-        position: 'fixed',
-        bottom: '20px', 
-        right: '20px',  
-      }}>Save Picture <BsDownload /></button>
     </div>
   );
 }

@@ -40,7 +40,7 @@ function App() {
     if (userExists) {
       try {
 
-        const response = await axios.get(`https://script.google.com/macros/s/AKfycbz9njkuB_G8W5H8--y69fAvUDB0JtN8UzzjUlYyp8NypRS_ECHA9HANlvP9KUKFXuet/exec?studentID=${6600014}`);
+        const response = await axios.get(`https://script.google.com/macros/s/AKfycbzNI1Y9R4hPyYwqcca8w0MG3R59Bw4rTXYFgR97FUsrFVGgruGSXjrO2jCLXZ-6ALfL/exec?studentID=${inputValue}`);
 
         if (response.status === 200) {
           console.log('Request succeeded');
@@ -58,6 +58,7 @@ function App() {
           } else {
             navigate(`/random/:${SHA256(encryptedData).toString()}`);
           }
+
         } else {
           console.error('Request failed with status code:', response.status);
         }
@@ -72,28 +73,26 @@ function App() {
     setIsInputEmpty(false);
   };
 
-  const [isFlipped, setIsFlipped] = useState(false);
-
-  const handleFlip = () => {
-    setIsFlipped(!isFlipped);
-  };
-
   return (
-    
-
-
-  <div className={`flip-card ${isFlipped ? 'flipped' : ''}`}>
-  <div className="flip-card-inner">
-    <div className="flip-card-front">
-      {/* Content for the front of the card */}
-    </div>
-    <div className="flip-card-back">
-      {/* Content for the back of the card */}
-    </div>
+    <div className="input-container">
+    <form onSubmit={handleSubmit}>
+      <Stack spacing={2} direction="column">
+        <TextField
+          id="outlined-basic"
+          label="รหัสนักศึกษา"
+          variant="outlined"
+          value={inputValue}
+          onChange={handleInputChange}
+          placeholder="รหัสนักศึกษา ..."
+          className="inputField"
+        />
+        <Button variant="contained" type="submit" className="button" disabled={isInputEmpty}>
+          ตามหาพี่รหัสกันเหอะ
+        </Button>
+        {message && <p style={{ color: 'red', animation: 'shake 0.5s' }}>{message}</p>}
+      </Stack>
+    </form>
   </div>
-  <button onClick={handleFlip}>Flip</button>
-</div>
-
   );
 }
 
