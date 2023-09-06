@@ -95,7 +95,7 @@ function Random({onClick}) {
 
   return (
     <div>
-      <div className="card-container">
+      <div className={`card-container${isCardFlipped ? ' flipped' : ''}`}>
         <div className="card">
           <div className="card-front">
             {renderCardContent()}
@@ -108,7 +108,10 @@ function Random({onClick}) {
           </div>
         </div>
       </div>
-      <button className="flip-button" onClick={handleFlipClick}>Flip Card</button> 
+      <button className="flip-button" onClick={handleFlipClick}>
+        {isCardFlipped ? 'Flip Back' : 'Flip Card'}
+      </button>
+
 
       <button className="save-button" onClick={handleSaveClick} style={{
         height: '50px',
