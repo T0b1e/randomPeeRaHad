@@ -25,12 +25,12 @@ function Random() {
         const bytes = AES.decrypt(storedData, 'yourMomFatAssBitch');
         const decryptedText = bytes.toString(enc.Utf8);
         const decryptedData = JSON.parse(decryptedText);
-        console.log('Decrypted Data:', decryptedData);
+        // console.log('Decrypted Data:', decryptedData);
 
         setDecryptedData(decryptedData);
         setImageURL(decryptedData[0][1]);
       } catch (error) {
-        console.error('Decryption error:', error);
+        // console.error('Decryption error:', error);
         setDecryptedData({ bytes: ['No header text available'] });
       }
     } else {
@@ -39,10 +39,11 @@ function Random() {
   }, []);
 
   const handleFlipClick = () => {
-    console.log('isCardFlipped:', isCardFlipped);
+    // console.log('isCardFlipped:', isCardFlipped);
     setIsCardFlipped(!isCardFlipped);
   };
 
+  /*
   const handleSaveImages = () => {
     // Capture the front card content as an image
     const frontCardElement = frontCardRef.current;
@@ -57,6 +58,7 @@ function Random() {
       frontCardLink.click();
     });
 
+
     // Capture the back card content as an image
     const backCardElement = backCardRef.current;
 
@@ -70,6 +72,7 @@ function Random() {
       backCardLink.click();
     });
   };
+  */
 
   const renderCardContent = () => {
     if (!decryptedDataArray) {
@@ -132,7 +135,7 @@ function Random() {
       <button className="flip-button" onClick={handleFlipClick}>
         Flip Card
       </button>
-      
+
       {/*
       <button className="save-button" onClick={handleSaveImages} style={{ height: '50px', position: 'fixed', bottom: '20px', right: '20px' }}>
         Save Pictures <BsDownload />
