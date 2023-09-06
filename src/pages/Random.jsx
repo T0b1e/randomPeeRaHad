@@ -7,7 +7,7 @@ import ReactCardFlip from "react-card-flip";
 import './Card.css';
 import html2canvas from 'html2canvas';
 
-function Random({onClick}) {
+function Random() {
   const { studentID } = useParams();
   const [originData, setOriginData] = useState('');
   const [decryptedDataArray, setDecryptedData] = useState(null);
@@ -109,7 +109,7 @@ function Random({onClick}) {
       <div className="card-back">
         <h3 className="lottery">Number Card: {decryptedDataArray && decryptedDataArray[1]}</h3>
         <div className="footer">
-          <p className="credit">CPE 65</p>
+          <p className="credit">CPE 64-65</p>
         </div>
       </div>
     </div>
