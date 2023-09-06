@@ -71,13 +71,15 @@ body {
   height: 100%;
   margin-left: 10px;
   margin-right: 10px; 
+  max-height: 350px; 
+  max-width: 100%;
   max-width: calc(100% - 20px);
 }
 
 .header {
   font-family: Kanit, sans-serif;
   font-size: 24px;
-  margin-top: 0;
+  margin-top: 5%;
   margin-bottom: 10px;
 }
 

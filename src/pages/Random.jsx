@@ -1,18 +1,19 @@
-import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { BsDownload } from 'react-icons/Bs';
+import { useEffect, useState, useRef } from 'react';
 import { AES, enc } from 'crypto-js';
-import ReactCardFlip from "react-card-flip";
-
-import './Card.css';
+import ReactCardFlip from 'react-card-flip';
+import { BsDownload } from 'react-icons/Bs';
 import html2canvas from 'html2canvas';
 
+import './Card.css';
+
 function Random() {
-  const { studentID } = useParams();
   const [originData, setOriginData] = useState('');
   const [decryptedDataArray, setDecryptedData] = useState(null);
   const [imageURL, setImageURL] = useState(null);
-  const [isCardFlipped, setIsCardFlipped] = useState(false); 
+  const [isCardFlipped, setIsCardFlipped] = useState(false);
+
+  const frontCardRef = useRef(null);
+  const backCardRef = useRef(null);
 
   useEffect(() => {
     const storedData = localStorage.getItem('encryptedData');
@@ -42,16 +43,31 @@ function Random() {
     setIsCardFlipped(!isCardFlipped);
   };
 
-  const handleSaveClick = () => {
-    const cardElement = document.querySelector('.card-container'); 
-  
-    html2canvas(cardElement).then((canvas) => {
-      const imageDataURL = canvas.toDataURL('image/png');
-  
-      const link = document.createElement('a');
-      link.href = imageDataURL;
-      link.download = 'card.png';
-      link.click();
+  const handleSaveImages = () => {
+    // Capture the front card content as an image
+    const frontCardElement = frontCardRef.current;
+
+    html2canvas(frontCardElement).then((canvas) => {
+      const frontCardImageURL = canvas.toDataURL('image/png');
+
+      // Create download link for the front card image
+      const frontCardLink = document.createElement('a');
+      frontCardLink.href = frontCardImageURL;
+      frontCardLink.download = 'front-card.png';
+      frontCardLink.click();
+    });
+
+    // Capture the back card content as an image
+    const backCardElement = backCardRef.current;
+
+    html2canvas(backCardElement).then((canvas) => {
+      const backCardImageURL = canvas.toDataURL('image/png');
+
+      // Create download link for the back card image
+      const backCardLink = document.createElement('a');
+      backCardLink.href = backCardImageURL;
+      backCardLink.download = 'back-card.png';
+      backCardLink.click();
     });
   };
 
@@ -96,30 +112,33 @@ function Random() {
 
   return (
     <div>
-    <ReactCardFlip isFlipped={isCardFlipped} flipDirection="horizontal">
-    <div className="card-container">
-      <div className="card-front">
-        {renderCardContent()}
-      </div>
-    </div>
-
-    <div className="card-container">
-      <div className="card-back">
-        <h3 className="lottery">Number Card: {decryptedDataArray && decryptedDataArray[1]}</h3>
-        <div className="footer">
-          <p className="credit">CPE 64-65</p>
+      <ReactCardFlip isFlipped={isCardFlipped} flipDirection="horizontal">
+        <div ref={frontCardRef} className="card-container">
+          <div className="card-front">
+            {renderCardContent()}
+          </div>
         </div>
-      </div>
-    </div>
-  </ReactCardFlip>
 
-    <button className="flip-button" onClick={handleFlipClick}>
-      Flip Card
-    </button>
+        <div ref={backCardRef} className="card-container">
+          <div className="card-back">
+            <h3 className="lottery">Number Card: {decryptedDataArray && decryptedDataArray[1]}</h3>
+            <div className="footer">
+              <p className="credit">CPE 64-65</p>
+            </div>
+          </div>
+        </div>
+      </ReactCardFlip>
 
-      <button className="save-button" onClick={handleSaveClick} style={{ height: '50px', position: 'fixed', bottom: '20px', right: '20px' }}>
-        Save Picture <BsDownload />
+      <button className="flip-button" onClick={handleFlipClick}>
+        Flip Card
       </button>
+      
+      {/*
+      <button className="save-button" onClick={handleSaveImages} style={{ height: '50px', position: 'fixed', bottom: '20px', right: '20px' }}>
+        Save Pictures <BsDownload />
+      </button>
+       */}
+      
     </div>
   );
 }

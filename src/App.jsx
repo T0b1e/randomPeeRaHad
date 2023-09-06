@@ -8,6 +8,7 @@ import './App.css'
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
+import CircularProgress from '@mui/material/CircularProgress';
 
 import studentData from './assets/studentID_66.json';
 
@@ -20,6 +21,7 @@ function App() {
   const [isInputEmpty, setIsInputEmpty] = useState(false);
   const [userExists, setUserExists] = useState(false);
   const [showResponse, setShowResponse] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState('');
 
   const navigate = useNavigate();
@@ -43,7 +45,11 @@ function App() {
     if (userExists) {
       try {
 
+        setIsLoading(true); 
+
         const response = await axios.get(`https://script.google.com/macros/s/AKfycbzNI1Y9R4hPyYwqcca8w0MG3R59Bw4rTXYFgR97FUsrFVGgruGSXjrO2jCLXZ-6ALfL/exec?studentID=${inputValue}`);
+
+        setIsLoading(false);
 
         if (response.status === 200) {
           console.log('Request succeeded');
@@ -90,8 +96,13 @@ function App() {
           className="inputField"
         />
         <Button variant="contained" type="submit" className="button" disabled={isInputEmpty}>
-          ตามหาพี่รหัสกันเหอะ
+          ตามหาพี่รหัสกันเถอะ
         </Button>
+        {isLoading && (
+          <div className="loading-overlay">
+            <CircularProgress />
+          </div>
+        )}
         {message && <p style={{ color: 'red', animation: 'shake 0.5s' }}>{message}</p>}
       </Stack>
     </form>
