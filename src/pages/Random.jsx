@@ -97,14 +97,12 @@ function Random() {
   return (
     <div>
     <ReactCardFlip isFlipped={isCardFlipped} flipDirection="horizontal">
-    {/* Front card */}
     <div className="card-container">
       <div className="card-front">
         {renderCardContent()}
       </div>
     </div>
 
-    {/* Back card */}
     <div className="card-container">
       <div className="card-back">
         <h3 className="lottery">Number Card: {decryptedDataArray && decryptedDataArray[1]}</h3>
