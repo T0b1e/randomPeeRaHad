@@ -64,13 +64,11 @@ body {
 
 .content {
   text-align: center;
-  margin-top: 25%;
+  margin-top: 5%;
 }
 
 .image {
   height: 100%;
-  margin-top: -10;
-  padding-top: -10;
   margin-left: 10px;
   margin-right: 10px; 
   max-width: calc(100% - 20px);
