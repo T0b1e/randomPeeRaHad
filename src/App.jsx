@@ -21,6 +21,7 @@ function App() {
   const [isInputEmpty, setIsInputEmpty] = useState(false);
   const [userExists, setUserExists] = useState(false);
   const [showResponse, setShowResponse] = useState(false);
+  const [isShaking, setIsShaking] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState('');
 
@@ -35,8 +36,9 @@ function App() {
     e.preventDefault();
 
     if (inputValue.trim() === '') {
-      setIsInputEmpty(true);
-      return;
+      setIsShaking(true);
+    } else {
+      setIsShaking(false);
     }
 
     const userExists = studentData.some(student => student.id === inputValue);
@@ -74,8 +76,8 @@ function App() {
       } catch (error) {
         console.error('Request error:', error);
       }
-    } else {
-      console.log("user doesn't exist");
+    } else if (!userExists && !isInputEmpty){
+      setMessage('หารหัสนักศึกษาไม่เจอ ทักแชทไลน์มาเลยจร้า');
     }
 
     setSubmittedValue(inputValue);
@@ -93,8 +95,8 @@ function App() {
           value={inputValue}
           onChange={handleInputChange}
           placeholder="รหัสนักศึกษา ..."
-          className="inputField"
-        />
+          className={`inputField ${isShaking ? 'shake' : ''}`}
+          />
         <Button variant="contained" type="submit" className="button" disabled={isInputEmpty}>
           ตามหาพี่รหัสกันเถอะ
         </Button>

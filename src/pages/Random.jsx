@@ -25,12 +25,10 @@ function Random() {
         const bytes = AES.decrypt(storedData, 'yourMomFatAssBitch');
         const decryptedText = bytes.toString(enc.Utf8);
         const decryptedData = JSON.parse(decryptedText);
-        // console.log('Decrypted Data:', decryptedData);
 
         setDecryptedData(decryptedData);
         setImageURL(decryptedData[0][1]);
       } catch (error) {
-        // console.error('Decryption error:', error);
         setDecryptedData({ bytes: ['No header text available'] });
       }
     } else {
@@ -39,40 +37,8 @@ function Random() {
   }, []);
 
   const handleFlipClick = () => {
-    // console.log('isCardFlipped:', isCardFlipped);
     setIsCardFlipped(!isCardFlipped);
   };
-
-  /*
-  const handleSaveImages = () => {
-    // Capture the front card content as an image
-    const frontCardElement = frontCardRef.current;
-
-    html2canvas(frontCardElement).then((canvas) => {
-      const frontCardImageURL = canvas.toDataURL('image/png');
-
-      // Create download link for the front card image
-      const frontCardLink = document.createElement('a');
-      frontCardLink.href = frontCardImageURL;
-      frontCardLink.download = 'front-card.png';
-      frontCardLink.click();
-    });
-
-
-    // Capture the back card content as an image
-    const backCardElement = backCardRef.current;
-
-    html2canvas(backCardElement).then((canvas) => {
-      const backCardImageURL = canvas.toDataURL('image/png');
-
-      // Create download link for the back card image
-      const backCardLink = document.createElement('a');
-      backCardLink.href = backCardImageURL;
-      backCardLink.download = 'back-card.png';
-      backCardLink.click();
-    });
-  };
-  */
 
   const renderCardContent = () => {
     if (!decryptedDataArray) {
