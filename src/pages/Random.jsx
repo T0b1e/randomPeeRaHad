@@ -2,7 +2,6 @@ import { useEffect, useState, useRef } from 'react';
 import { AES, enc } from 'crypto-js';
 import ReactCardFlip from 'react-card-flip';
 import { BsDownload } from 'react-icons/Bs';
-import html2canvas from 'html2canvas';
 
 import './Card.css';
 
@@ -25,7 +24,7 @@ function Random() {
         const bytes = AES.decrypt(storedData, 'yourMomFatAssBitch');
         const decryptedText = bytes.toString(enc.Utf8);
         const decryptedData = JSON.parse(decryptedText);
-
+        setDecryptedData(['พืชตระกูลกะเพรา,163', 'https://drive.google.com/open?id=1ynwpMfTVrSiW8QBb-E_1jKAGdDrcEpCB', 'หาให้เจอน้าา'])
         setDecryptedData(decryptedData);
         setImageURL(decryptedData[0][1]);
       } catch (error) {
