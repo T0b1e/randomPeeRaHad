@@ -31,7 +31,7 @@ function countNonEmptyRowsInColumnA() {
 
 function doGet(e) {
   try {
-    var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Sheet2");
+    var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Sheet1");
   } catch (error) {
     Logger.log("Error:", error.toString());
   }
@@ -39,9 +39,9 @@ function doGet(e) {
   // Get the studentID query parameter from the request
   // var studentID = 66000214;
 
-  var studentID = 1321313123;
+  // var studentID = 1321313123;
 
-  // var studentID = e.parameter && e.parameter.studentID;
+  var studentID = e.parameter && e.parameter.studentID;
   var studentTriedBefore = checkIfStudentTriedBefore(sheet, studentID);
 
  if (studentTriedBefore) {

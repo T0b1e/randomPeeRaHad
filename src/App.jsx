@@ -49,7 +49,7 @@ function App() {
 
         setIsLoading(true); 
 
-        const response = await axios.get(`https://script.google.com/macros/s/AKfycbyYGTOyey5CQOaIkud7uBon8gIicuMD_1UANlfzYh4lsIS3C9Tim0YboPnwjoiw2sqD/exec?studentID=${inputValue}`);
+        const response = await axios.get(`https://script.google.com/macros/s/AKfycbx8fqsnareS3TuPxZgEFHdnq-Ld9eUSWKiTrUmukjXyRGAHF4Tas0CJ9mRx6K2ajz38/exec?studentID=${inputValue}`);
 
         setIsLoading(false);
 
@@ -108,6 +108,10 @@ function App() {
         {message && <p style={{ color: 'red', animation: 'shake 0.5s' }}>{message}</p>}
       </Stack>
     </form>
+    <div className='About'>
+      <p>https://github.com/T0b1e/randomPeeRaHad</p>
+      <p>https://discord.gg/x9wkTWdb</p>
+    </div>
   </div>
   );
 }

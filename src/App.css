@@ -59,3 +59,13 @@ body {
   75% { transform: translateX(-5px); }
   100% { transform: translateX(0); }
 }
+
+.About {
+  position: absolute;
+  text-align: center;
+  font-size: 12px;
+  letter-spacing: 0px;
+  text-indent: 0;
+  color: gray;
+  bottom: 0px;
+}
