@@ -8,8 +8,8 @@ import {
 
 import App from './App.jsx'
 import Random from './pages/Random.jsx';
-import ErrorPage from "./pages/error-pages";
-
+import ErrorPage from "./pages/ErrorPages.jsx";
+import onFixingPage from './pages/onFixingPage.jsx';
 
 const router = createBrowserRouter([
   {
@@ -20,6 +20,11 @@ const router = createBrowserRouter([
   {
     path: "/random/:studentID",
     element: <Random />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/maintane",
+    element: <onFixingPage />,
     errorElement: <ErrorPage />,
   },
 ]);

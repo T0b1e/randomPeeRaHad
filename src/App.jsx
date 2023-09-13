@@ -12,8 +12,11 @@ import CircularProgress from '@mui/material/CircularProgress';
 
 import studentData from './assets/studentID_66.json';
 
-// const APIURL = process.env.REACT_APP_API_URL;
-// const KEYS = process.env.REACT_APP_SECRET;
+import dotenv from 'dotenv';
+dotenv.config();
+
+const APIURL = process.env.REACT_APP_API_URL;
+const KEYS = process.env.REACT_APP_SECRET;
 
 function App() {
   const [inputValue, setInputValue] = useState('');
@@ -49,7 +52,7 @@ function App() {
 
         setIsLoading(true); 
 
-        const response = await axios.get(`https://script.google.com/macros/s/AKfycbx8fqsnareS3TuPxZgEFHdnq-Ld9eUSWKiTrUmukjXyRGAHF4Tas0CJ9mRx6K2ajz38/exec?studentID=${inputValue}`);
+        const response = await axios.get(`${APIURL}?studentID=${inputValue}`);
 
         setIsLoading(false);
 
@@ -58,7 +61,7 @@ function App() {
 
           console.log(response.data);
 
-          const encryptedData = AES.encrypt(JSON.stringify(response.data), 'yourMomFatAssBitch').toString();
+          const encryptedData = AES.encrypt(JSON.stringify(response.data), `${KEYS}`).toString();
           
           localStorage.setItem('encryptedData', encryptedData);
 
